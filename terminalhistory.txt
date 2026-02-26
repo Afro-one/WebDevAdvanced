@@ -1,0 +1,134 @@
+Microsoft Windows [Version 10.0.26200.7840]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Chnqe>docker --version
+Docker version 28.3.3, build 980b856
+
+C:\Users\Chnqe>docker pull nginx:latest
+latest: Pulling from library/nginx
+bae5a1799a80: Pull complete
+4f4efe02d542: Pull complete
+7b6cb8ccac7b: Pull complete
+f73400a233fd: Pull complete
+47cd406a84ef: Pull complete
+46bf3a120c8e: Pull complete
+0c8d55a45c0d: Pull complete
+Digest: sha256:341bf0f3ce6c5277d6002cf6e1fb0319fa4252add24ab6a0e262e0056d313208
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+
+C:\Users\Chnqe>docker run -d -p 8080:80 --name my-nginx nginx:latest
+c1c0e9160c51424de126d2c0224d7d42492d4be19bdc1b4d7ba99a87a520a42a
+
+C:\Users\Chnqe>docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+c1c0e9160c51   nginx:latest   "/docker-entrypoint.…"   24 seconds ago   Up 23 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+
+C:\Users\Chnqe>docker exec -it my-nginx /bin/bash
+root@c1c0e9160c51:/# uname -a
+Linux c1c0e9160c51 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 GNU/Linux
+root@c1c0e9160c51:/# exit
+exit
+
+C:\Users\Chnqe>docker stop my-nginx
+my-nginx
+
+C:\Users\Chnqe>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+C:\Users\Chnqe>docker ps -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED         STATUS                      PORTS     NAMES
+c1c0e9160c51   nginx:latest                                 "/docker-entrypoint.…"   9 minutes ago   Exited (0) 27 seconds ago             my-nginx
+40e8530fa3ce   webcalculator-web-calculator                 "/docker-entrypoint.…"   3 months ago    Exited (0) 7 weeks ago                web-calculator
+41729d6767d6   webcalculator-api-calculator                 "python calculator.p…"   3 months ago    Exited (0) 7 weeks ago                api-calculator
+6941f2a7b7f8   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago    Exited (1) 4 months ago               heuristic_black
+03823db9e0cf   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago    Exited (1) 4 months ago               pensive_mendel
+09a96541a329   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago    Exited (0) 4 months ago               intelligent_mirzakhani
+bbb8a8f1665d   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago    Exited (0) 4 months ago               loving_carver
+858fd7a60250   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago    Exited (0) 4 months ago               angry_jones
+9389005c4948   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago    Exited (0) 5 months ago               adoring_ganguly
+bc7878751c8c   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago    Exited (0) 5 months ago               quizzical_hopper
+0fda6e2ada57   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago    Exited (0) 5 months ago               busy_heisenberg
+
+C:\Users\Chnqe>docker rm my-nginx
+my-nginx
+
+C:\Users\Chnqe>docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+C:\Users\Chnqe>docker ps -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED        STATUS                    PORTS     NAMES
+40e8530fa3ce   webcalculator-web-calculator                 "/docker-entrypoint.…"   3 months ago   Exited (0) 7 weeks ago              web-calculator
+41729d6767d6   webcalculator-api-calculator                 "python calculator.p…"   3 months ago   Exited (0) 7 weeks ago              api-calculator
+6941f2a7b7f8   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago   Exited (1) 4 months ago             heuristic_black
+03823db9e0cf   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago   Exited (1) 4 months ago             pensive_mendel
+09a96541a329   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago   Exited (0) 4 months ago             intelligent_mirzakhani
+bbb8a8f1665d   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago   Exited (0) 4 months ago             loving_carver
+858fd7a60250   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   4 months ago   Exited (0) 4 months ago             angry_jones
+9389005c4948   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago   Exited (0) 5 months ago             adoring_ganguly
+bc7878751c8c   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago   Exited (0) 5 months ago             quizzical_hopper
+0fda6e2ada57   judevops.azurecr.io/matan_teame-calculator   "python calculator.p…"   5 months ago   Exited (0) 5 months ago             busy_heisenberg
+
+C:\Users\Chnqe>docker image ls
+REPOSITORY                                   TAG       IMAGE ID       CREATED        SIZE
+nginx                                        latest    341bf0f3ce6c   2 weeks ago    237MB
+webcaluclator-api-calculator                 latest    5180009d2339   7 weeks ago    350MB
+webcaluclator-web-calculator                 latest    969a83529134   7 weeks ago    81.3MB
+webcalculator-api-calculator                 latest    5d2c6db233c2   3 months ago   350MB
+webcalculator-web-calculator                 latest    8f35c560b7d6   3 months ago   80MB
+judevops.azurecr.io/matan_teame-calculator   latest    61f5fb9d7ad4   5 months ago   350MB
+
+C:\Users\Chnqe>docker image rm nginx
+Untagged: nginx:latest
+Deleted: sha256:341bf0f3ce6c5277d6002cf6e1fb0319fa4252add24ab6a0e262e0056d313208
+
+C:\Users\Chnqe>mkdir docker-test
+
+C:\Users\Chnqe>cd mkdir docker-test
+The system cannot find the path specified.
+
+C:\Users\Chnqe>dir
+ Volume in drive C is OS
+ Volume Serial Number is B89E-66C1
+
+ Directory of C:\Users\Chnqe
+
+23/02/2026  13:06    <DIR>          .
+09/09/2025  17:58    <DIR>          ..
+23/02/2026  12:39    <DIR>          .docker
+08/11/2023  16:50               203 .gitconfig
+15/10/2025  10:51                20 .lesshst
+07/10/2025  13:21    <DIR>          .pytest_cache
+07/10/2025  13:16                38 .python_history
+15/10/2025  15:56             3,396 .viminfo
+27/10/2023  13:26    <DIR>          .vscode
+17/12/2023  18:46    <DIR>          ansel
+03/11/2023  08:26    <DIR>          coding
+19/05/2025  18:06    <DIR>          Contacts
+05/02/2025  11:06    <DIR>          Creative Cloud Files  tema23jh@student.ju.se 20701F0C64DC9E2A0A495CBD@6b9b292263e715ac495fe4.e
+09/09/2025  12:42    <DIR>          devops
+04/11/2025  18:21                 0 docker
+23/02/2026  13:06    <DIR>          docker-test
+14/09/2023  20:15    <DIR>          Documents
+22/02/2026  10:18    <DIR>          Downloads
+19/05/2025  18:06    <DIR>          Favorites
+07/10/2025  14:06    <DIR>          Generated code
+19/05/2025  18:06    <DIR>          Links
+19/05/2025  18:06    <DIR>          Music
+02/01/2026  12:34    <DIR>          OneDrive
+19/05/2025  18:06    <DIR>          Pictures
+19/05/2025  18:06    <DIR>          Saved Games
+19/05/2025  18:06    <DIR>          Searches
+23/05/2025  10:27    <DIR>          Videos
+               5 File(s)          3,657 bytes
+              22 Dir(s)  295,564,292,096 bytes free
+
+C:\Users\Chnqe>cd docker-test
+
+C:\Users\Chnqe\docker-test>cd ..
+
+C:\Users\Chnqe>mkdir postgres-test
+
+C:\Users\Chnqe>cd postgres-test
+
+C:\Users\Chnqe\postgres-test>

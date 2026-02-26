@@ -1,0 +1,302 @@
+Microsoft Windows [Version 10.0.26200.7840]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Chnqe\postgres-test>docker build -t my-postgres-image .
+[+] Building 17.9s (5/5) FINISHED                                               docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                            0.1s
+ => => transferring dockerfile: 171B                                                            0.0s
+ => [internal] load metadata for docker.io/library/postgres:latest                              2.2s
+ => [internal] load .dockerignore                                                               0.1s
+ => => transferring context: 2B                                                                 0.0s
+ => [1/1] FROM docker.io/library/postgres:latest@sha256:b6b4d0b75c699a2c94dfc5a94fe09f38630f3  11.7s
+ => => resolve docker.io/library/postgres:latest@sha256:b6b4d0b75c699a2c94dfc5a94fe09f38630f3b  0.0s
+ => => sha256:0d47a78b32570a6d06f804b2066addfbabf58ccece693d2905ecd86f3fd0f3c8 5.84kB / 5.84kB  0.3s
+ => => sha256:271cc796df4f493a11077b397fe9cd924c4365ac6067e630d6a9995b2f3b95fa 3.14kB / 3.14kB  0.4s
+ => => sha256:777cc89ca451e3286deb4ac5d68df1c494600c403aaf4cca2abed1bbf523fd95 8.20MB / 8.20MB  1.2s
+ => => sha256:ae2a61803f45f9a16a8a08a9c911f97d4805143f6810189e55a85e09d96f6f01 116B / 116B      0.5s
+ => => sha256:9ebad2bb4202094f47f62c0dec52d92b420f35a642914025b906f794c36ae6 19.33kB / 19.33kB  0.3s
+ => => sha256:dde5569f086be0615cb1e4e366973040394f930caea72cc33a1e112424c07ef8 6.44MB / 6.44MB  1.8s 
+ => => sha256:659362c5a0b7c289982c72f8a617f284fbaa531184a7ace6ddde01cb18606cff 1.17kB / 1.17kB  0.3s 
+ => => sha256:698873b94b0d13aef9098473fb77c26eba2eba2e198653a415a2a3013b1d76b8 128B / 128B      0.3s 
+ => => sha256:b3892cfe5fd0dd6f3fae7e110038d16313c7c280494628451e1e1b45a500a1c9 1.31MB / 1.31MB  0.6s 
+ => => sha256:97d92c993d8ccc2acca3dffb548cd0f813f5f6d56f270efd14ca3242d95914f1 187B / 187B      0.3s 
+ => => sha256:ead3bf55c0035e28fde6061fd41f57a1ab221fee035b8226d678141acce 115.27MB / 115.27MB  10.1s 
+ => => sha256:c6f633039419970f7febb88e5206b7f4a3535110ef65991be6a24b328e9feb1f 1.26MB / 1.26MB  0.5s 
+ => exporting to image                                                                         15.0s 
+ => => exporting layers                                                                         0.0s 
+ => => exporting manifest sha256:c9d0bd81e04d535cbc26dcff04c6e1b3ac602584cd3cef14c59392c8de97d  0.0s 
+ => => exporting config sha256:f09c05671c6815c57761d6b730ca3f62f4eb4f91393e72a6981a5d3a353a350  0.0s 
+ => => exporting attestation manifest sha256:0f26ade189c5979d1e0b3cf97d1a1766d9b5276491b9fd5a0  0.0s 
+ => => exporting manifest list sha256:9d865d7bc254c9bd24f6e1159baecac3e6412e7bb4e1273d1c676654  0.0s 
+ => => naming to docker.io/library/my-postgres-image:latest                                     0.0s 
+ => => unpacking to docker.io/library/my-postgres-image:latest                                 14.8s 
+
+ 4 warnings found (use docker --debug to expand):
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 2)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 3)
+ - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "POSTGRES_PASSWORD") (line 3)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 4)
+
+yaxkx
+
+C:\Users\Chnqe\postgres-test>docker image ls
+REPOSITORY                                   TAG       IMAGE ID       CREATED          SIZE
+custom-nginx                                 latest    0f7ea135e39c   52 minutes ago   237MB
+my-postgres-image                            latest    9d865d7bc254   10 days ago      643MB
+webcaluclator-api-calculator                 latest    5180009d2339   7 weeks ago      350MB
+webcaluclator-web-calculator                 latest    969a83529134   7 weeks ago      81.3MB
+webcalculator-api-calculator                 latest    5d2c6db233c2   3 months ago     350MB
+webcalculator-web-calculator                 latest    8f35c560b7d6   3 months ago     80MB
+
+C:\Users\Chnqe\postgres-test>docker run -d -p 5432:5432 --name my-postgres-container my-postgres-image
+5879f1f2006802780855b7389de3607bb89928158240bf93b60483b3248140ec
+
+C:\Users\Chnqe\postgres-test>docker ps
+CONTAINER ID   IMAGE               COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+5879f1f20068   my-postgres-image   "docker-entrypoint.s…"   8 seconds ago    Up 7 seconds    0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   my-postgres-container
+528ddcdc65a8   custom-nginx        "/docker-entrypoint.…"   53 minutes ago   Up 53 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp       custom-nginx-container
+
+C:\Users\Chnqe\postgres-test>docker exec -it my-postgress-container bash
+Error response from daemon: No such container: my-postgress-container
+
+C:\Users\Chnqe\postgres-test>docker ps
+CONTAINER ID   IMAGE               COMMAND                  CREATED             STATUS             PORTS                                         NAMES
+5879f1f20068   my-postgres-image   "docker-entrypoint.s…"   8 minutes ago       Up 8 minutes       0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   my-postgres-container
+528ddcdc65a8   custom-nginx        "/docker-entrypoint.…"   About an hour ago   Up About an hour   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp       custom-nginx-container
+
+C:\Users\Chnqe\postgres-test>docker exec -it my-postgres-container bash
+root@5879f1f20068:/# psql postgresql://postgres:12345@127.0.0.1:5432/postgres
+psql (18.2 (Debian 18.2-1.pgdg13+1))
+Type "help" for help.
+
+postgres=# CREATE TABLE employees(
+postgres(# id SERIAL PRIMARY KEY,
+postgres(# first_name VARCHART (50),
+postgres(# last_
+postgres(#
+postgres(# ;
+postgres(#
+postgres(#
+postgres(#
+postgres(# CREATE TABLE employees (
+postgres(# id SERIAL PRIMARY KEY,
+postgres(# first_name VARCHAR(50),
+postgres(# last_name VARCHAR(50),
+postgres(# email VARCHAR(100) UNIQUE,
+postgres(# hire_data DATE)
+postgres(# ;
+postgres(# ;
+postgres(# ^C
+postgres=# CREATE TABLE employees (
+id SERIAL PRIMARY KEY,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+email VARCHAR(100) UNIQUE,
+hire_date DATE
+);
+CREATE TABLE
+postgres=# \dt
+            List of tables
+ Schema |   Name    | Type  |  Owner
+--------+-----------+-------+----------
+ public | employees | table | postgres
+(1 row)
+
+postgres=# SELECT * FROM employees
+postgres-# ;
+ id | first_name | last_name | email | hire_date 
+----+------------+-----------+-------+-----------
+(0 rows)
+
+postgres=# INSERT INTO employees (first_name, last_name, email, hire_date)
+VALUES ('John', 'Doe', 'john.doe@example.com', '2023-01-15');
+SELECT * FROM employees;
+INSERT 0 1
+ id | first_name | last_name |        email         | hire_date
+----+------------+-----------+----------------------+------------
+  1 | John       | Doe       | john.doe@example.com | 2023-01-15
+(1 row)
+
+postgres=# INSERT INTO employees (first_name, last_name, email, hire_date)
+VALUES ('Patrick', 'r', 'patrick.r@example.com', '2023-09-01');
+SELECT * FROM employees;
+INSERT 0 1
+ id | first_name | last_name |         email         | hire_date
+----+------------+-----------+-----------------------+------------
+  1 | John       | Doe       | john.doe@example.com  | 2023-01-15
+  2 | Patrick    | r         | patrick.r@example.com | 2023-09-01
+(2 rows)
+
+postgres=# INSERT INTO employees (first_name, last_name, email, hire_date)
+VALUES ('Jerome', 'r', 'jerome.landre@example.com', '2023-09-01');
+SELECT * FROM employees;
+INSERT 0 1
+ id | first_name | last_name |           email           | hire_date
+----+------------+-----------+---------------------------+------------
+  1 | John       | Doe       | john.doe@example.com      | 2023-01-15
+  2 | Patrick    | r         | patrick.r@example.com     | 2023-09-01
+  3 | Jerome     | r         | jerome.landre@example.com | 2023-09-01
+(3 rows)
+
+postgres=# SELECT first_name, last_name FROM employees;
+ first_name | last_name 
+------------+-----------
+ John       | Doe
+ Patrick    | r
+ Jerome     | r
+(3 rows)
+
+postgres=# UPDATE employees
+SET email = 'john.newemail@example.com'
+WHERE id = 1;
+UPDATE 1
+postgres=# SELECT * FROM employees
+postgres-# ;
+ id | first_name | last_name |           email           | hire_date  
+----+------------+-----------+---------------------------+------------
+  2 | Patrick    | r         | patrick.r@example.com     | 2023-09-01
+  3 | Jerome     | r         | jerome.landre@example.com | 2023-09-01
+  1 | John       | Doe       | john.newemail@example.com | 2023-01-15
+(3 rows)
+
+postgres=# DELETE FROM employees
+WHERE id = 1;
+SELECT * FROM employees;
+DELETE 1
+ id | first_name | last_name |           email           | hire_date
+----+------------+-----------+---------------------------+------------
+  2 | Patrick    | r         | patrick.r@example.com     | 2023-09-01
+  3 | Jerome     | r         | jerome.landre@example.com | 2023-09-01
+(2 rows)
+
+postgres=# exit
+root@5879f1f20068:/# exit
+exit
+
+C:\Users\Chnqe\postgres-test>npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (postgres-test)
+version: (1.0.0)                                                                                                                                              
+description:                                                                                                                                                  
+entry point: (dbtest.js)                                                                                                                                      
+test command:                                                                                                                                                 
+git repository:                                                                                                                                               
+keywords:                                                                                                                                                     
+author:                                                                                                                                                       
+license: (ISC)                                                                                                                                                
+About to write to C:\Users\Chnqe\postgres-test\package.json:
+
+{
+  "name": "postgres-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dbtest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+  },
+  "author": "",
+  "license": "ISC"
+  "license": "ISC"
+}
+
+
+Is this OK? (yes)
+
+
+C:\Users\Chnqe\postgres-test>npm install pg
+
+added 14 packages, and audited 15 packages in 1s
+
+found 0 vulnerabilities
+
+C:\Users\Chnqe\postgres-test>node dbtest.js
+Connected to PostgreSQL database with async/await
+^C
+C:\Users\Chnqe\postgres-test>node dbtest.js
+Connected to PostgreSQL database with async/await
+All employees: [
+  {
+    id: 2,
+    first_name: 'Patrick',
+    last_name: 'r',
+    email: 'patrick.r@example.com',
+    hire_date: 2023-08-31T23:00:00.000Z
+  },
+  {
+    id: 3,
+    first_name: 'Jerome',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+    hire_date: 2023-08-31T23:00:00.000Z
+  }
+]
+^C
+C:\Users\Chnqe\postgres-test>node dbtest.js
+Connected to PostgreSQL database with async/await
+Inserted record: {
+  id: 4,
+  first_name: 'You',
+  last_name: 'YourLastame',
+  email: 'you.yourlastnamel@example.com',
+  hire_date: 2023-01-15T00:00:00.000Z
+}
+All employees: [
+  {
+    id: 2,
+    first_name: 'Patrick',
+    last_name: 'r',
+    email: 'patrick.r@example.com',
+    hire_date: 2023-08-31T23:00:00.000Z
+  },
+  {
+    id: 3,
+    first_name: 'Jerome',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+    hire_date: 2023-08-31T23:00:00.000Z
+  },
+  {
+    id: 3,
+    first_name: 'Jerome',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+  },
+  {
+    id: 3,
+    first_name: 'Jerome',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+    id: 3,
+    first_name: 'Jerome',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+    last_name: 'r',
+    email: 'jerome.landre@example.com',
+    email: 'jerome.landre@example.com',
+    hire_date: 2023-08-31T23:00:00.000Z
+  },
+  {
+    id: 4,
+    first_name: 'You',
+    last_name: 'YourLastame',
+    email: 'you.yourlastnamel@example.com',
+    hire_date: 2023-01-15T00:00:00.000Z
+  }
+]
