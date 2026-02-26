@@ -1,0 +1,19 @@
+{
+  "name": "weblab-server",
+  "version": "1.0.0",
+  "description": "Weblab 3",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "web",
+    "lab"
+  ],
+  "author": "Matan, David, Belmin, Antoni",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
