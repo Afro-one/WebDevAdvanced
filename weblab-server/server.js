@@ -1,106 +1,65 @@
 const express = require("express");
+const { Client } = require("pg");
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-app.use(express.static("public"));
-
-app.get("/", (req, res) => {
-  res.send("welcome to the REST API!");
+const client = new Client({
+  host: "localhost", // since the container's port is mapped to localhost
+  port: 5432,
+  user: "postgres", // default user
+  password: "12345", // password set in the container command
+  database: "stores", // stores database
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+app.use('/', express.static('public'));
 
-let products = [
-  {
-    id: 1,
-    name: "labtop",
-    price: 4286,
-  },
-  {
-    id: 2,
-    name: "phone",
-    price: 2379,
-  },
-];
+app.get('/api/stores', async (req, res) =>{
+    const selectQuery = "SELECT * FROM stores;";
+    try {
+        const dbresult = await client.query(selectQuery);
+        res.json(dbresult.rows)
+    } catch (err) {
+        console.error("Error selecting records", err.stack);
+    }
+})
 
-app.get("/api/products", (req, res) => {
-  //const pNames = products.map((product) => product.name);
+app.post('/api/store', express.json(), async (req, res) => {
+    const insertQuery = `INSERT INTO stores (name, url, district)
+                        VALUES ($1, $2, $3, $4)
+                        RETURNING *;`;
+    const insertValues = [req.body.name, req.body.url, req.body.district]
+    try{
+        const dbresult = await client.query(insertQuery, insertValues)
+        res.json(dbresult.rows[0])
+    }
+    catch{
+        console.error("Error inserting records", err.stack);
+    }
+})
 
-  //res.json(pNames);
+const startServer = async () => {
+    try {
+        await client.connect();
+        console.log('Connected to PostgreSQL database ');
 
-  res.json(products);
-});
+        // ONE-TIME SEED
+        // const fs = require("fs");
+        // const stores = JSON.parse(fs.readFileSync("stores.json", "utf-8"));
+        // for (const store of stores) {
+        //     await client.query(
+        //         "INSERT INTO stores (name, url, district) VALUES ($1, $2, $3)",
+        //         [store.name, store.url, store.district]
+        //     );
+        // }
+        // console.log(`seded ${stores.length} stores`);
+        // END SEED
 
-app.get("/api/products/:id", (req, res) => {
-  const pId = parseInt(req.params.id, 10);
-  const product = products.find((p) => p.id === pId);
 
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).json({ error: "Product not found" });
-  }
-});
-
-// part 2
-
-// assignment 1
-app.post("/api/products", express.json(), (req, res) => {
-  const { name, price } = req.body;
-
-  if (!name || !price) {
-    return res.status(400).json({ error: "Name and Price are required" });
-  }
-
-  const newProduct = { id: products.length + 1, name, price };
-  products.push(newProduct);
-
-  console.log("Updated products", products);
-
-  res.status(201).json(newProduct);
-});
-
-// assignment 2
-app.put("/api/products/:id", express.json(), (req, res) => {
-  const id = parseInt(req.params.id);
-  const { name, price } = req.body;
-
-  if (!name || !price) {
-    return res.status(400).json({ error: "Name and Price are required" });
-  }
-
-  const product = products.find((p) => p.id === id);
-  if (!product) return res.status(404).send("Product not found");
-
-  product.name = name;
-  product.price = price;
-
-  res.json(product);
-});
-
-/*
-
-function fetchProducts() {
-  fetch("/api/products")
-    .then(response.json())
-    .then((data) => {
-      console.log("Products:", data);
-    })
-    .catch((error) => console.error("Error fetching products:", error));
+    } catch (err) {
+        console.error('Connection error', err.stack);
+    }
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
 }
-
-fetchProducts();
-
-function fetchProductsById(productId) {
-  fetch(`/api/products/${productId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(`Product with Id ${productId}:`, data);
-    })
-    .catch((error) => console.error("Error fetching product by ID:", error));
-}
-
-fetchProductsById(1);
-*/
+startServer();

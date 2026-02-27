@@ -4,8 +4,8 @@
   "description": "Weblab 3",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "web",
@@ -14,6 +14,7 @@
   "author": "Matan, David, Belmin, Antoni",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.19.0"
   }
 }

@@ -1,0 +1,24 @@
+
+body{
+    background-color: beige;
+    overflow-x: hidden;
+}
+.storesContainer {
+    background-color: rgb(236, 205, 164);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.storesContainer div {
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 4px;
+    box-sizing: border-box;
+    min-width: 0;
+}
