@@ -1,65 +1,30 @@
-function fetchStores() {
-  let storesContainer = document.createElement("div");
-  storesContainer.classList.add("storesContainer");
-  document.body.appendChild(storesContainer);
-
-  fetch("/api/stores")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      for (const item of data) {
-        let storeDiv = document.createElement("div");
-        let storeName = document.createElement("h1");
-        let storeUrl = document.createElement("p");
-        let storeDistrict = document.createElement("p");
-
-        storeName.innerText = item.name;
-        storeDiv.appendChild(storeName);
-
-        storeUrl.innerText = item.url;
-        storeDiv.appendChild(storeUrl);
-
-        storeDistrict.innerText = item.district;
-        storeDiv.appendChild(storeDistrict);
-
-        storesContainer.appendChild(storeDiv);
-      }
-
-      console.log(data);
-    });
-}
-
 // To fetch by sorted by district ascenidcng
-function fetchStoresByDistrictAsc() {
-  let storesContainer = document.createElement("div");
-  storesContainer.classList.add("storesContainer");
-  document.body.appendChild(storesContainer);
+function fetchStores(route = "/api/stores") {
+  const storesContainer = document.getElementById("stores"); // ← use existing div
 
-  fetch("/api/stores/sortByDstrictAscending")
-    .then((response) => {
-      return response.json();
-    })
+  fetch(route)
+    .then((response) => response.json())
     .then((data) => {
+      storesContainer.innerHTML = ""; // clear before re-rendering
       for (const item of data) {
         let storeDiv = document.createElement("div");
-        let storeName = document.createElement("h1");
-        let storeUrl = document.createElement("p");
+        storeDiv.classList.add("store"); // ← add the CSS class!
+
+        let storeName = document.createElement("h2"); // h2 matches your CSS
+        let storeUrl = document.createElement("a");
         let storeDistrict = document.createElement("p");
 
         storeName.innerText = item.name;
-        storeDiv.appendChild(storeName);
-
-        storeUrl.innerText = item.url;
-        storeDiv.appendChild(storeUrl);
-
+        storeUrl.href = item.url;
+        // storeUrl.innerText = item.url;
+        storeUrl.innerText = "Click me!";
         storeDistrict.innerText = item.district;
-        storeDiv.appendChild(storeDistrict);
 
+        storeDiv.appendChild(storeName);
+        storeDiv.appendChild(storeUrl);
+        storeDiv.appendChild(storeDistrict);
         storesContainer.appendChild(storeDiv);
       }
-
-      console.log(data);
     });
 }
 
@@ -101,7 +66,8 @@ async function deleteStore(id) {
   }
 }
 
-fetchStoresByDistrictAsc();
-//fetchStores();
+// fetchStores();
+fetchStores("/api/stores/sortByDstrictAscending");
 
 document.addEventListener("DOMContentLoaded", loadStores);
+
