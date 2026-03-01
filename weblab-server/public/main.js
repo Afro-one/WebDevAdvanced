@@ -1,28 +1,26 @@
 // To fetch by sorted by district ascenidcng
 function fetchStores(route = "/api/stores") {
-  const storesContainer = document.getElementById("stores"); // ← use existing div
+  const storesContainer = document.getElementById("stores");
 
   fetch(route)
     .then((response) => response.json())
     .then((data) => {
-      storesContainer.innerHTML = ""; // clear before re-rendering
       for (const item of data) {
         let storeDiv = document.createElement("div");
-        storeDiv.classList.add("store"); // ← add the CSS class!
+        storeDiv.classList.add("store");
 
-        let storeName = document.createElement("h2"); // h2 matches your CSS
+        let storeName = document.createElement("h2");
         let storeUrl = document.createElement("a");
         let storeDistrict = document.createElement("p");
 
         storeName.innerText = item.name;
-        storeUrl.href = item.url;
-        // storeUrl.innerText = item.url;
+        storeUrl.href = `https://${item.url}`;
         storeUrl.innerText = "Click me!";
         storeDistrict.innerText = item.district;
 
         storeDiv.appendChild(storeName);
-        storeDiv.appendChild(storeUrl);
         storeDiv.appendChild(storeDistrict);
+        storeDiv.appendChild(storeUrl);
         storesContainer.appendChild(storeDiv);
       }
     });
@@ -66,8 +64,8 @@ async function deleteStore(id) {
   }
 }
 
-// fetchStores();
-fetchStores("/api/stores/sortByDstrictAscending");
+fetchStores();
+// fetchStores("/api/stores/sortByDstrictAscending");
 
 document.addEventListener("DOMContentLoaded", loadStores);
 
