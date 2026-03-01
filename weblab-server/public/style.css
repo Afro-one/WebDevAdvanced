@@ -1,24 +1,93 @@
 
-body{
-    background-color: beige;
-    overflow-x: hidden;
-}
-.storesContainer {
-    background-color: rgb(236, 205, 164);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
+
+.hero {
+  height: 60vh;
+  background-image: url("jönköping.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.storesContainer div {
-    background-color: white;
-    padding: 5px;
-    border: 1px solid #ccc;
-    text-align: center;
-    border-radius: 4px;
-    box-sizing: border-box;
-    min-width: 0;
+
+#stores {
+  padding: 80px 20px;  
+  margin-top: 60px;    
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 40px 20px;
+
+  /* Modern gradient background */
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 35px;
+  font-size: 30px;
+  color: white;
+  letter-spacing: 1px;
+}
+
+#stores {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* Store card */
+.store {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: white;
+}
+
+.store:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.3);
+}
+
+.store h2 {
+  margin: 0 0 10px 0;
+  font-size: 19px;
+  color: white;
+}
+
+.store p {
+  margin: 6px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Button */
+.store a {
+  display: inline-block;
+  margin-top: 14px;
+  text-decoration: none;
+  background: linear-gradient(45deg, #ff8a00, #e52e71);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.store a:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
 }
