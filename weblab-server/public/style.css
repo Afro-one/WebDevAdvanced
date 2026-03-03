@@ -116,6 +116,14 @@ body {
   font-size: 12px;
 }
 
+.btn--edit {
+  position: absolute;
+  top: 44px;
+  right: 14px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
 .btn:hover {
   opacity: 0.85;
   transform: scale(1.03);
