@@ -14,6 +14,7 @@ function fetchStores(route = "/api/stores") {
         .then((data) => {
           for (const item of data) {
             let storeDiv = document.createElement("div");
+            storeDiv.id = "storeDiv"
             storeDiv.classList.add("store");
 
             let storeName = document.createElement("h2");
@@ -131,21 +132,19 @@ document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Add sto
 });
 
 function editStore(id) {
-// Find the store div and read its data back out
-const storeDiv = document.querySelector(`[storeId="${id}"]`);
+  const storeDiv = document.getElementById("storeDiv");
 
-// Populate the form fields
-document.getElementById("storeId").value = id;
-document.getElementById("storeName").value = storeDiv.querySelector("h2").innerText;
-document.getElementById("storeDistrict").value = storeDiv.querySelector("p:nth-child(2)").innerText;
-document.getElementById("storePhone").value = storeDiv.querySelector("p:nth-child(3)").innerText;
-document.getElementById("storeUrl").value = storeDiv.querySelector("a").href.replace("https://", "");
+  // Populate the form fields
+  document.getElementById("storeId").value = id;
+  document.getElementById("storeName").value = storeDiv.querySelector("h2").innerText;
+  document.getElementById("storeDistrict").value = storeDiv.querySelector("p:nth-child(2)").innerText;
+  document.getElementById("storePhone").value = storeDiv.querySelector("p:nth-child(3)").innerText;
+  document.getElementById("storeUrl").value = storeDiv.querySelector("a").href.replace("https://", "");
 
-// Update button label so user knows they're editing
-document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Update store";
+  document.getElementById("formBtn").innerText = "Update store";
 
-// Scroll up to the form
-document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
+  // Scroll up to the form
+  document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
 }
 
 document.getElementById("sortNameAsc").addEventListener("click", () =>
@@ -170,8 +169,8 @@ fetch("/api/auth/status")
   .then((response) => response.json())
   .then((data) => {
     document.getElementById("formPanel").style.display = data.loggedIn ? "block" : "none";
-    document.querySelector('a[href="/login"]').style.display = data.loggedIn ? "none" : "inline";
-    document.querySelector('a[href="/logout"]').style.display = data.loggedIn ? "inline" : "none";
+    document.getElementById('login').style.display = data.loggedIn ? "none" : "inline";
+    document.getElementById('logout').style.display = data.loggedIn ? "inline" : "none";
   });
 }
 
