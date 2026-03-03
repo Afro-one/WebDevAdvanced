@@ -5,6 +5,7 @@ const PORT = 3000;
 
 const client = new Client({
   host: "localhost", // since the container's port is mapped to localhost
+  // host: "host.docker.internal",
   port: 5432,
   user: "postgres", // default user
   password: "12345", // password set in the container command
