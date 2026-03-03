@@ -80,9 +80,40 @@ app.get("/api/stores", async (req, res) => {
   }
 });
 
-// This is to sort
-app.get("/api/stores/sortByDstrictAscending", async (req, res) => {
-  const selectQuery = "SELECT * FROM stores ORDER BY district ASC;";
+// Sort GETS
+  app.get("/api/stores/sortDistrictAsc", async (req, res) => {
+    const selectQuery = "SELECT * FROM stores ORDER BY district ASC;";
+    try {
+      const dbresult = await client.query(selectQuery);
+      res.json(dbresult.rows);
+    } catch (err) {
+      console.error("Error selecting records", err.stack);
+    }
+  });
+
+  
+app.get("/api/stores/sortDistrictDesc", async (req, res) => {
+  const selectQuery = "SELECT * FROM stores ORDER BY district DESC;";
+  try {
+    const dbresult = await client.query(selectQuery);
+    res.json(dbresult.rows);
+  } catch (err) {
+    console.error("Error selecting records", err.stack);
+  }
+});
+
+app.get("/api/stores/sortNameAsc", async (req, res) => {
+  const selectQuery = "SELECT * FROM stores ORDER BY name ASC;";
+  try {
+    const dbresult = await client.query(selectQuery);
+    res.json(dbresult.rows);
+  } catch (err) {
+    console.error("Error selecting records", err.stack);
+  }
+});
+
+app.get("/api/stores/sortNameDesc", async (req, res) => {
+  const selectQuery = "SELECT * FROM stores ORDER BY name DESC;";
   try {
     const dbresult = await client.query(selectQuery);
     res.json(dbresult.rows);

@@ -1,5 +1,8 @@
-// To fetch by sorted by district ascenidcng
+// current route kept for the consistency between editing and deleting
+let currentRoute = "/api/stores";
+
 function fetchStores(route = "/api/stores") {
+  currentRoute = route;
   const storesContainer = document.getElementById("stores");
   storesContainer.innerHTML = ""; // Clear existing stores (fix for delete)
   fetch(route)
@@ -97,7 +100,6 @@ function deleteStore(id) {
 
 
 fetchStores();
-// fetchStores("/api/stores/sortByDstrictAscending");
 
 const form = document.getElementById("addStoreForm");
 
@@ -138,3 +140,19 @@ function editStore(id) {
   // Scroll up to the form
   document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
 }
+
+document.getElementById("sortNameAsc").addEventListener("click", () =>
+  fetchStores("/api/stores/sortNameAsc")
+);
+
+document.getElementById("sortNameDesc").addEventListener("click", () =>
+  fetchStores("/api/stores/sortNameDesc")
+);
+
+document.getElementById("sortDistrictAsc").addEventListener("click", () =>
+  fetchStores("/api/stores/sortDistrictAsc")
+);
+
+document.getElementById("sortDistrictDesc").addEventListener("click", () =>
+  fetchStores("/api/stores/sortDistrictDesc")
+);
