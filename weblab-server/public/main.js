@@ -12,22 +12,25 @@ function fetchStores(route = "/api/stores") {
         let storeName = document.createElement("h2");
         let storeUrl = document.createElement("a");
         let storeDistrict = document.createElement("p");
+        let phoneNumber = document.createElement("p");
 
         storeName.innerText = item.name;
         storeUrl.href = `https://${item.url}`;
         storeUrl.innerText = "Click me!";
         storeDistrict.innerText = item.district;
+        phoneNumber.innerText = item.phone_number;
         storeDiv.setAttribute("storeId", item.id);
 
         storeDiv.appendChild(storeName);
         storeDiv.appendChild(storeDistrict);
+        storeDiv.appendChild(phoneNumber);
         storeDiv.appendChild(storeUrl);
         storesContainer.appendChild(storeDiv);
       }
     });
 }
 
-function addStore(name, url, district) {
+function addStore(name, url, district, phone) {
   fetch("/api/store", {
     method: "POST",
     headers: {
@@ -37,7 +40,8 @@ function addStore(name, url, district) {
     body: JSON.stringify({
             "name": name,
             "url": url,
-            "district": district
+            "district": district,
+            "phone_number": phone
         })   
   })
     .then((response) => response.json())
@@ -47,7 +51,7 @@ function addStore(name, url, district) {
     });
 }
 
-function updateStore(id, name, url, district) {
+function updateStore(id, name, url, district, phone) {
   fetch(`/api/store/${id}`, {
     method: "PUT",
     headers: {
@@ -57,7 +61,8 @@ function updateStore(id, name, url, district) {
     body: JSON.stringify({
             "name": name,
             "url": url,
-            "district": district
+            "district": district,
+            "phone_number": phone
         })   
   })
     .then((response) => response.json())
@@ -82,3 +87,4 @@ function deleteStore(id) {
 fetchStores();
 // fetchStores("/api/stores/sortByDstrictAscending");
 
+// addStore("Test Store", "www.teststore.com", "Test District", "123456789");
