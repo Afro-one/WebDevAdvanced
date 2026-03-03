@@ -1,4 +1,13 @@
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0; 
+
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  color: white;
+}
 
 .hero {
   height: 60vh;
@@ -6,38 +15,88 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
-#stores {
-  padding: 80px 20px;  
-  margin-top: 60px;    
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 22px;
-}
-
-
-body {
-  font-family: Arial, sans-serif;
+.hero h1 {
+  font-size: 48px;
   margin: 0;
-  padding: 40px 20px;
-
-  /* Modern gradient background */
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  min-height: 100vh;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 35px;
-  font-size: 30px;
-  color: white;
   letter-spacing: 1px;
+  text-align: center;
+  text-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 70px 20px 60px; 
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+  margin-bottom: 25px;
+}
+
+.panel__title {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+}
+
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.form__row {
+  display: grid;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.input {
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #ff8a00, #e52e71);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  width: fit-content;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
+}
+
+.form__hint {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+
 
 #stores {
   display: grid;
@@ -45,7 +104,6 @@ h1 {
   gap: 22px;
 }
 
-/* Store card */
 .store {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
@@ -64,7 +122,6 @@ h1 {
 .store h2 {
   margin: 0 0 10px 0;
   font-size: 19px;
-  color: white;
 }
 
 .store p {
@@ -73,7 +130,6 @@ h1 {
   opacity: 0.9;
 }
 
-/* Button */
 .store a {
   display: inline-block;
   margin-top: 14px;
