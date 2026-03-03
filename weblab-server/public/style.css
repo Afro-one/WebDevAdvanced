@@ -147,3 +147,9 @@ body {
   opacity: 0.85;
   transform: scale(1.05);
 }
+
+.form-buttons {
+  display: flex;
+  gap: 12px;       
+  align-items: center;
+}

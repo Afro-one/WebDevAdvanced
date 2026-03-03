@@ -10,41 +10,76 @@
 </head>
 
 <body>
-<a href="/login">Login</a>
+
+  <a href="/login" class="login-link">Login</a>
+
   <section class="hero">
     <h1>Jönköping Stores</h1>
   </section>
 
-
   <main class="page">
 
-
     <section class="panel">
-      <h2 class="panel__title">Add a new store</h2>
+      <h2 class="panel__title">Add / Edit Store</h2>
 
       <form class="form" id="addStoreForm">
+
+        <input type="hidden" id="storeId" />
+
         <div class="form__row">
           <label class="label" for="storeName">Store name</label>
-          <input class="input" id="storeName" name="storeName" type="text" placeholder="e.g. Åhlens" required />
+          <input
+            class="input"
+            id="storeName"
+            name="storeName"
+            type="text"
+            placeholder="e.g. Åhlens"
+            required
+          />
         </div>
 
         <div class="form__row">
           <label class="label" for="storeUrl">Website (optional)</label>
-          <input class="input" id="storeUrl" name="storeUrl" type="text" placeholder="e.g. ahlens.se/..." />
+          <input
+            class="input"
+            id="storeUrl"
+            name="storeUrl"
+            type="text"
+            placeholder="e.g. ahlens.se/..."
+          />
+        </div>
+
+        <div class="form__row">
+          <label class="label" for="storePhone">Phone number (optional)</label>
+          <input
+            class="input"
+            id="storePhone"
+            name="storePhone"
+            type="tel"
+            placeholder="e.g. 036-123 456"
+          />
         </div>
 
         <div class="form__row">
           <label class="label" for="storeDistrict">District (optional)</label>
-          <input class="input" id="storeDistrict" name="storeDistrict" type="text" placeholder="e.g. Öster" />
+          <input
+            class="input"
+            id="storeDistrict"
+            name="storeDistrict"
+            type="text"
+            placeholder="e.g. Öster"
+          />
         </div>
 
-        <button class="btn" type="submit">Add store</button>
+        <div class="form-buttons">
+          <button class="btn" type="submit">Add store</button>
+        </div>
 
-        <p class="form__hint"> </p>
+        <p class="form__hint"></p>
+
       </form>
     </section>
 
-  
     <section class="panel">
       <h2 class="panel__title">Store list</h2>
       <div id="stores"></div>

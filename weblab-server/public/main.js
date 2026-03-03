@@ -82,3 +82,21 @@ function deleteStore(id) {
 fetchStores();
 // fetchStores("/api/stores/sortByDstrictAscending");
 
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const form = document.getElementById("addStoreForm");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();  // 🚨 THIS IS CRITICAL
+
+    const name = document.getElementById("storeName").value.trim();
+    const url = document.getElementById("storeUrl").value.trim();
+    const phone = document.getElementById("storePhone").value.trim();
+    const district = document.getElementById("storeDistrict").value.trim();
+
+    addStore(name, url, district, phone);
+  });
+
+});
+
