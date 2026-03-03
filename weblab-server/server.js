@@ -33,21 +33,17 @@ app.get("/login.js", (req, res) => {
 
 // for the login
 app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
-  //POST /login route for the form send above
   console.log("POST ROUTE /login called");
   const { username, password } = req.body;
+
   if (username === "admin" && password === "password") {
-    // In a real-world validate credentials against a database
-    const token = crypto.randomBytes(64).toString("hex"); // Generate a secure random token
-    sessions[token] = { username }; // Store the token along with user data in our session store
-    res.cookie("authToken", token, { signed: true, httpOnly: true }); // Set a signed, HTTP-only cookie with the token
-    res.redirect("/"); // Redirect the user to the default route after successful login
-  } else {
     const token = crypto.randomBytes(64).toString("hex");
-    sessions[token] = { username }; 
-    res.cookie("authToken", token, { signed: false, httpOnly: true , error: "Invalid credentials" }); 
-    res.redirect("/login"); 
-    // res.status(401).send(`Login Error: Invalid credentials. Please try again.`);
+    sessions[token] = { username };
+    res.cookie("authToken", token, { signed: true, httpOnly: true });
+    res.redirect("/");
+  } else {
+    // Just re-render the login page with an error message
+    res.status(401).redirect("/login?error=Invalid+username+or+password");
   }
 });
 
