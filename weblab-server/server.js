@@ -13,6 +13,7 @@ app.use(cookieParser(secret));
 
 const client = new Client({
   host: "localhost", // since the container's port is mapped to localhost
+  // host: "host.docker.internal",
   port: 5432,
   user: "postgres", // default user
   password: "12345", // password set in the container command
@@ -91,27 +92,27 @@ app.get("/api/stores/sortByDstrictAscending", async (req, res) => {
 });
 
 app.post("/api/store", express.json(), async (req, res) => {
-  const insertQuery = `INSERT INTO stores (name, url, district)
-                        VALUES ($1, $2, $3)
+  const insertQuery = `INSERT INTO stores (name, url, district, phone_number)
+                        VALUES ($1, $2, $3, $4)
                         RETURNING *;`;
-  const insertValues = [req.body.name, req.body.url, req.body.district];
+  const insertValues = [req.body.name, req.body.url, req.body.district, req.body.phone_number];
   try {
     const dbresult = await client.query(insertQuery, insertValues);
     res.json(dbresult.rows[0]);
-  } catch {
+  } catch (err) {
     console.error("Error inserting records", err.stack);
   }
 });
 
 // Update
 app.put("/api/store/:id", express.json(), async (req, res) => {
-  const { name, url, district } = req.body;
+  const { name, url, district , phone_number} = req.body;
   const { id } = req.params;
 
   try {
     const result = await client.query(
-      `UPDATE stores SET name=$1, url=$2, district=$3 WHERE id=$4 RETURNING *`,
-      [name, url, district, id],
+      `UPDATE stores SET name=$1, url=$2, district=$3, phone_number=$4 WHERE id=$5 RETURNING *`,
+      [name, url, district, phone_number, id],
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Store not found" });
