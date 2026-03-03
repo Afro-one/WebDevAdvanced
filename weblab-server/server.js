@@ -1,7 +1,15 @@
 const express = require("express");
+const cookieParser = require("cookie-parser"); // for the login
+const crypto = require("crypto"); // for the login cookie
 const { Client } = require("pg");
 const app = express();
 const PORT = 3000;
+
+const secret = "mySecretCookieToken"; // for the secret cookie
+const sessions = {}; // for the login token
+
+// for the login
+app.use(cookieParser(secret));
 
 const client = new Client({
   host: "localhost", // since the container's port is mapped to localhost
@@ -13,8 +21,52 @@ const client = new Client({
 
 app.use("/", express.static("public"));
 
+// serve the login page with a form to login
 app.get("/login", (req, res) => {
   res.sendFile(__dirname + "/login/login.html");
+});
+
+// for the login
+app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
+  //POST /login route for the form send above
+  console.log("POST ROUTE /login called");
+  const { username, password } = req.body;
+  if (username === "admin" && password === "password") {
+    // In a real-world validate credentials against a database
+    const token = crypto.randomBytes(64).toString("hex"); // Generate a secure random token
+    sessions[token] = { username }; // Store the token along with user data in our session store
+    res.cookie("authToken", token, { signed: true, httpOnly: true }); // Set a signed, HTTP-only cookie with the token
+    res.redirect("/"); // Redirect the user to the default route after successful login
+  } else {
+    res.status(401).send(`Login Error: Invalid credentials. Please try again.`);
+  }
+});
+
+// protected route that can only be accessed if the user is logged in.
+app.get("/protected", (req, res) => {
+  const token = req.signedCookies.authToken; // Read the token out of the cookies
+  if (token && sessions[token]) {
+    // if there is a token at all and if we know that token in our session store
+    res.send(` // send the protect protected content
+<!DOCTYPE html><html><head><title>Protected</title></head>
+<body>
+<h1>Protected Page</h1>
+<p>Welcome, ${sessions[token].username}! This page is only accessible if you are logged in.</p>
+<p><a href="/">Back to Home</a></p>
+</body></html>
+`);
+  } else {
+    res.redirect("/login"); // else forward to login page
+  }
+});
+// clear the cookies, remove session and redirect to default route (logging out)
+app.get("/logout", (req, res) => {
+  const token = req.signedCookies.authToken;
+  if (token) {
+    delete sessions[token];
+  }
+  res.clearCookie("authToken");
+  res.redirect("/login");
 });
 
 app.get("/api/stores", async (req, res) => {
