@@ -43,23 +43,24 @@ app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
   }
 });
 
-// protected route that can only be accessed if the user is logged in.
-app.get("/protected", (req, res) => {
-  const token = req.signedCookies.authToken; // Read the token out of the cookies
-  if (token && sessions[token]) {
-    // if there is a token at all and if we know that token in our session store
-    res.send(` // send the protect protected content
-<!DOCTYPE html><html><head><title>Protected</title></head>
-<body>
-<h1>Protected Page</h1>
-<p>Welcome, ${sessions[token].username}! This page is only accessible if you are logged in.</p>
-<p><a href="/">Back to Home</a></p>
-</body></html>
-`);
-  } else {
-    res.redirect("/login"); // else forward to login page
-  }
-});
+// // protected route that can only be accessed if the user is logged in.
+// app.get("/protected", (req, res) => {
+//   const token = req.signedCookies.authToken; // Read the token out of the cookies
+//   if (token && sessions[token]) {
+//     // if there is a token at all and if we know that token in our session store
+//     res.send(` // send the protect protected content
+// <!DOCTYPE html><html><head><title>Protected</title></head>
+// <body>
+// <h1>Protected Page</h1>
+// <p>Welcome, ${sessions[token].username}! This page is only accessible if you are logged in.</p>
+// <p><a href="/">Back to Home</a></p>
+// </body></html>
+// `);
+//   } else {
+//     res.redirect("/login"); // else forward to login page
+//   }
+// });
+
 // clear the cookies, remove session and redirect to default route (logging out)
 app.get("/logout", (req, res) => {
   const token = req.signedCookies.authToken;
@@ -68,6 +69,15 @@ app.get("/logout", (req, res) => {
   }
   res.clearCookie("authToken");
   res.redirect("/login");
+});
+
+app.get("/api/auth/status", (req, res) => {
+  const token = req.signedCookies.authToken;
+  if (token && sessions[token]) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
 });
 
 app.get("/api/stores", async (req, res) => {

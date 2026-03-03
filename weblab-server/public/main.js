@@ -4,155 +4,178 @@ let currentRoute = "/api/stores";
 function fetchStores(route = "/api/stores") {
   currentRoute = route;
   const storesContainer = document.getElementById("stores");
-  storesContainer.innerHTML = ""; // Clear existing stores (fix for delete)
-  fetch(route)
+  storesContainer.innerHTML = "";
+
+  fetch("/api/auth/status")
     .then((response) => response.json())
-    .then((data) => {
-      for (const item of data) {
-        let storeDiv = document.createElement("div");
-        storeDiv.classList.add("store");
+    .then((authData) => {
+      fetch(route)
+        .then((response) => response.json())
+        .then((data) => {
+          for (const item of data) {
+            let storeDiv = document.createElement("div");
+            storeDiv.classList.add("store");
 
-        let storeName = document.createElement("h2");
-        let storeUrl = document.createElement("a");
-        let storeDistrict = document.createElement("p");
-        let phoneNumber = document.createElement("p");
-        let deleteBtn = document.createElement("button");
-        let editBtn = document.createElement("button");
+            let storeName = document.createElement("h2");
+            let storeUrl = document.createElement("a");
+            let storeDistrict = document.createElement("p");
+            let phoneNumber = document.createElement("p");
 
-        storeName.innerText = item.name;
-        storeUrl.href = `https://${item.url}`;
-        storeUrl.innerText = "Click me!";
-        storeDistrict.innerText = item.district;
-        phoneNumber.innerText = item.phone_number;
-        storeDiv.setAttribute("storeId", item.id);
+            storeName.innerText = item.name;
+            storeUrl.href = `https://${item.url}`;
+            storeUrl.innerText = "Click me!";
+            storeDistrict.innerText = item.district;
+            phoneNumber.innerText = item.phone_number;
+            storeDiv.setAttribute("storeId", item.id);
 
-        deleteBtn.innerText = "Delete";
-        deleteBtn.classList.add("btn", "btn--delete");
-        deleteBtn.addEventListener("click", () => deleteStore(item.id));
+            storeDiv.appendChild(storeName);
+            storeDiv.appendChild(storeDistrict);
+            storeDiv.appendChild(phoneNumber);
+            storeDiv.appendChild(storeUrl);
 
-        editBtn.innerText = "Edit";
-        editBtn.classList.add("btn", "btn--edit");
-        editBtn.addEventListener("click", () => editStore(item.id));
+            if (authData.loggedIn) {
+              let deleteBtn = document.createElement("button");
+              let editBtn = document.createElement("button");
 
-        storeDiv.appendChild(storeName);
-        storeDiv.appendChild(storeDistrict);
-        storeDiv.appendChild(phoneNumber);
-        storeDiv.appendChild(storeUrl);
-        storeDiv.appendChild(deleteBtn);
-        storeDiv.appendChild(editBtn);
-        storesContainer.appendChild(storeDiv);
-      }
+              deleteBtn.innerText = "Delete";
+              deleteBtn.classList.add("btn", "btn--delete");
+              deleteBtn.addEventListener("click", () => deleteStore(item.id));
+
+              editBtn.innerText = "Edit";
+              editBtn.classList.add("btn", "btn--edit");
+              editBtn.addEventListener("click", () => editStore(item.id));
+
+              storeDiv.appendChild(deleteBtn);
+              storeDiv.appendChild(editBtn);
+            }
+
+            storesContainer.appendChild(storeDiv);
+          }
+        });
     });
 }
 
 function addStore(name, url, district, phone) {
-  fetch("/api/store", {
-    method: "POST",
-    headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-          },
-    body: JSON.stringify({
-            "name": name,
-            "url": url,
-            "district": district,
-            "phone_number": phone
-        })   
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("New store added:", data);
-      fetchStores(); // store list refresh after adding new store
-    });
+fetch("/api/store", {
+  method: "POST",
+  headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+  body: JSON.stringify({
+          "name": name,
+          "url": url,
+          "district": district,
+          "phone_number": phone
+      })   
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("New store added:", data);
+    fetchStores(); // store list refresh after adding new store
+  });
 }
 
 function updateStore(id, name, url, district, phone) {
-  fetch(`/api/store/${id}`, {
-    method: "PUT",
-    headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-          },
-    body: JSON.stringify({
-            "name": name,
-            "url": url,
-            "district": district,
-            "phone_number": phone
-        })   
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Store updated:", data);
-      fetchStores(); // refresh store list after update
-    });
+fetch(`/api/store/${id}`, {
+  method: "PUT",
+  headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+  body: JSON.stringify({
+          "name": name,
+          "url": url,
+          "district": district,
+          "phone_number": phone
+      })   
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Store updated:", data);
+    fetchStores(); // refresh store list after update
+  });
 }
 
 function deleteStore(id) {
-  fetch(`/api/store/${id}`, {
-    method: "DELETE"
-  })
-    .then((response) => response.json())
-    .then((data) => { 
-      console.log("Store deleted:", data);
-      fetchStores(); // refresh store list after deletion
-    });
-  }
-
-
-fetchStores();
+fetch(`/api/store/${id}`, {
+  method: "DELETE"
+})
+  .then((response) => response.json())
+  .then((data) => { 
+    console.log("Store deleted:", data);
+    fetchStores(); // refresh store list after deletion
+  });
+}
 
 const form = document.getElementById("addStoreForm");
 
 form.addEventListener("submit", function (e) {
-  e.preventDefault();
+e.preventDefault();
 
-  const id = document.getElementById("storeId").value;
-  const name = document.getElementById("storeName").value.trim();
-  const url = document.getElementById("storeUrl").value.trim();
-  const phone = document.getElementById("storePhone").value.trim();
-  const district = document.getElementById("storeDistrict").value.trim();
+const id = document.getElementById("storeId").value;
+const name = document.getElementById("storeName").value.trim();
+const url = document.getElementById("storeUrl").value.trim();
+const phone = document.getElementById("storePhone").value.trim();
+const district = document.getElementById("storeDistrict").value.trim();
 
-  if (id) {
-    updateStore(id, name, url, district, phone);
-  } else {
-    addStore(name, url, district, phone);
-  }
+if (id) {
+  updateStore(id, name, url, district, phone);
+} else {
+  addStore(name, url, district, phone);
+}
 
-  form.reset();
-  document.getElementById("storeId").value = "";
-  document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Add store";
+form.reset();
+document.getElementById("storeId").value = "";
+document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Add store";
 });
 
 function editStore(id) {
-  // Find the store div and read its data back out
-  const storeDiv = document.querySelector(`[storeId="${id}"]`);
+// Find the store div and read its data back out
+const storeDiv = document.querySelector(`[storeId="${id}"]`);
 
-  // Populate the form fields
-  document.getElementById("storeId").value = id;
-  document.getElementById("storeName").value = storeDiv.querySelector("h2").innerText;
-  document.getElementById("storeDistrict").value = storeDiv.querySelector("p:nth-child(2)").innerText;
-  document.getElementById("storePhone").value = storeDiv.querySelector("p:nth-child(3)").innerText;
-  document.getElementById("storeUrl").value = storeDiv.querySelector("a").href.replace("https://", "");
+// Populate the form fields
+document.getElementById("storeId").value = id;
+document.getElementById("storeName").value = storeDiv.querySelector("h2").innerText;
+document.getElementById("storeDistrict").value = storeDiv.querySelector("p:nth-child(2)").innerText;
+document.getElementById("storePhone").value = storeDiv.querySelector("p:nth-child(3)").innerText;
+document.getElementById("storeUrl").value = storeDiv.querySelector("a").href.replace("https://", "");
 
-  // Update button label so user knows they're editing
-  document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Update store";
+// Update button label so user knows they're editing
+document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Update store";
 
-  // Scroll up to the form
-  document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
+// Scroll up to the form
+document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
 }
 
 document.getElementById("sortNameAsc").addEventListener("click", () =>
-  fetchStores("/api/stores/sortNameAsc")
+fetchStores("/api/stores/sortNameAsc")
 );
 
 document.getElementById("sortNameDesc").addEventListener("click", () =>
-  fetchStores("/api/stores/sortNameDesc")
+fetchStores("/api/stores/sortNameDesc")
 );
 
 document.getElementById("sortDistrictAsc").addEventListener("click", () =>
-  fetchStores("/api/stores/sortDistrictAsc")
+fetchStores("/api/stores/sortDistrictAsc")
 );
 
 document.getElementById("sortDistrictDesc").addEventListener("click", () =>
-  fetchStores("/api/stores/sortDistrictDesc")
+fetchStores("/api/stores/sortDistrictDesc")
 );
+
+
+function checkAuth() {
+fetch("/api/auth/status")
+  .then((response) => response.json())
+  .then((data) => {
+    document.getElementById("formPanel").style.display = data.loggedIn ? "block" : "none";
+    document.querySelector('a[href="/login"]').style.display = data.loggedIn ? "none" : "inline";
+    document.querySelector('a[href="/logout"]').style.display = data.loggedIn ? "inline" : "none";
+  });
+}
+
+checkAuth();
+
+
+fetchStores();
