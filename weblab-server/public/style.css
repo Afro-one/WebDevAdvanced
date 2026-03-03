@@ -85,6 +85,14 @@ body {
   width: fit-content;
 }
 
+.btn--delete {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
 .btn:hover {
   opacity: 0.85;
   transform: scale(1.03);
@@ -112,6 +120,7 @@ body {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   color: white;
+  position: relative;
 }
 
 .store:hover {

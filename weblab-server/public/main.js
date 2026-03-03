@@ -13,6 +13,7 @@ function fetchStores(route = "/api/stores") {
         let storeUrl = document.createElement("a");
         let storeDistrict = document.createElement("p");
         let phoneNumber = document.createElement("p");
+        let deleteBtn = document.createElement("button");
 
         storeName.innerText = item.name;
         storeUrl.href = `https://${item.url}`;
@@ -21,10 +22,16 @@ function fetchStores(route = "/api/stores") {
         phoneNumber.innerText = item.phone_number;
         storeDiv.setAttribute("storeId", item.id);
 
+        deleteBtn.innerText = "Delete";
+        deleteBtn.classList.add("btn", "btn--delete");
+        // deleteBtn.style.background = "linear-gradient(45deg, #e52e71, #8b0000)";
+        deleteBtn.addEventListener("click", () => deleteStore(item.id));
+
         storeDiv.appendChild(storeName);
         storeDiv.appendChild(storeDistrict);
         storeDiv.appendChild(phoneNumber);
         storeDiv.appendChild(storeUrl);
+        storeDiv.appendChild(deleteBtn);
         storesContainer.appendChild(storeDiv);
       }
     });
