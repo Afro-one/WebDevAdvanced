@@ -13,6 +13,10 @@ const client = new Client({
 
 app.use("/", express.static("public"));
 
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/login/login.html");
+});
+
 app.get("/api/stores", async (req, res) => {
   const selectQuery = "SELECT * FROM stores;";
   try {

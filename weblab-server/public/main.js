@@ -17,6 +17,7 @@ function fetchStores(route = "/api/stores") {
         storeUrl.href = `https://${item.url}`;
         storeUrl.innerText = "Click me!";
         storeDistrict.innerText = item.district;
+        storeDiv.setAttribute("storeId", item.id);
 
         storeDiv.appendChild(storeName);
         storeDiv.appendChild(storeDistrict);
@@ -26,46 +27,58 @@ function fetchStores(route = "/api/stores") {
     });
 }
 
-// Interaction with the put and delete
-
-async function editStore(id) {
-  const name = prompt("Enter new name:");
-  const url = prompt("Enter new URL:");
-  const district = prompt("Enter new district:");
-
-  if (!name) return;
-
-  const updatedStore = { name, url, district };
-
-  try {
-    const res = await fetch(`/api/store/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedStore),
+function addStore(name, url, district) {
+  fetch("/api/store", {
+    method: "POST",
+    headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          },
+    body: JSON.stringify({
+            "name": name,
+            "url": url,
+            "district": district
+        })   
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("New store added:", data);
+      fetchStores(); // store list refresh after adding new store
     });
-    if (!res.ok) throw new Error("Failed to update store");
-
-    loadStores(); // refresh table
-  } catch (err) {
-    console.error("Error updating store:", err);
-  }
 }
 
-async function deleteStore(id) {
-  if (!confirm("Are you sure you want to delete this store?")) return;
-
-  try {
-    const res = await fetch(`/api/store/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error("Failed to delete store");
-
-    loadStores(); // refresh table
-  } catch (err) {
-    console.error("Error deleting store:", err);
-  }
+function updateStore(id, name, url, district) {
+  fetch(`/api/store/${id}`, {
+    method: "PUT",
+    headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          },
+    body: JSON.stringify({
+            "name": name,
+            "url": url,
+            "district": district
+        })   
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Store updated:", data);
+      fetchStores(); // refresh store list after update
+    });
 }
+
+function deleteStore(id) {
+  fetch(`/api/store/${id}`, {
+    method: "DELETE"
+  })
+    .then((response) => response.json())
+    .then((data) => { 
+      console.log("Store deleted:", data);
+      fetchStores(); // refresh store list after deletion
+    });
+  }
+
 
 fetchStores();
 // fetchStores("/api/stores/sortByDstrictAscending");
-
-document.addEventListener("DOMContentLoaded", loadStores);
 
