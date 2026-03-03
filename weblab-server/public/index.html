@@ -78,12 +78,21 @@
         <p class="form__hint"></p>
 
       </form>
-    </section>
+<section class="panel">
 
-    <section class="panel">
-      <h2 class="panel__title">Store list</h2>
-      <div id="stores"></div>
-    </section>
+  <div class="panel-header">
+    <h2 class="panel__title">Store list</h2>
+
+    <div class="sort-controls">
+      <button class="btn sort-btn" id="sortNameAsc">Name ↑</button>
+      <button class="btn sort-btn" id="sortNameDesc">Name ↓</button>
+      <button class="btn sort-btn" id="sortDistrictAsc">District ↑</button>
+    </div>
+  </div>
+
+  <div id="stores"></div>
+
+</section>
 
   </main>
 
