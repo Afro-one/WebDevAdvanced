@@ -20,16 +20,10 @@ const client = new Client({
   database: "stores", // stores database
 });
 
+
 app.use("/", express.static("public"));
+app.use("/login", express.static("login"));
 
-// serve the login page with a form to login
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/login/login.html");
-});
-
-app.get("/login.js", (req, res) => {
-  res.sendFile(__dirname + "/login/login.js");
-});
 
 // for the login
 app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
@@ -174,7 +168,7 @@ const startServer = async () => {
     await client.connect();
     console.log("Connected to PostgreSQL database ");
 
-    // ONE-TIME SEED
+    // ONE-TIME POPULATION OF THE DATABASE
     /*     const fs = require("fs");
     const stores = JSON.parse(fs.readFileSync("stores.json", "utf-8"));
     for (const store of stores) {
@@ -183,8 +177,8 @@ const startServer = async () => {
         [store.name, store.url, store.district],
       );
     }
-    console.log(`seded ${stores.length} stores`); */
-    // END SEED
+    console.log(`populated ${stores.length} stores`); */
+    // END
   } catch (err) {
     console.error("Connection error", err.stack);
   }
@@ -193,3 +187,4 @@ const startServer = async () => {
   });
 };
 startServer();
+

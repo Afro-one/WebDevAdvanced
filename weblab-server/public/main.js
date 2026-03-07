@@ -2,7 +2,6 @@
 let currentRoute = "/api/stores";
 
 function fetchStores(route = "/api/stores") {
-  currentRoute = route;
   const storesContainer = document.getElementById("stores");
   storesContainer.innerHTML = "";
 
@@ -18,13 +17,10 @@ function fetchStores(route = "/api/stores") {
             storeDiv.classList.add("store");
 
             let storeName = document.createElement("h2");
-            let storeUrl = document.createElement("a");
             let storeDistrict = document.createElement("p");
             let phoneNumber = document.createElement("p");
 
             storeName.innerText = item.name;
-            storeUrl.href = `https://${item.url}`;
-            storeUrl.innerText = "Click me!";
             storeDistrict.innerText = item.district;
             phoneNumber.innerText = item.phone_number;
             storeDiv.setAttribute("storeId", item.id);
@@ -32,7 +28,20 @@ function fetchStores(route = "/api/stores") {
             storeDiv.appendChild(storeName);
             storeDiv.appendChild(storeDistrict);
             storeDiv.appendChild(phoneNumber);
-            storeDiv.appendChild(storeUrl);
+
+            // adding the link button only if item.url exists
+            if (item.url) {
+              let storeUrl = document.createElement("a");
+              storeUrl.innerText = "Click me!";
+
+              if (item.url.startsWith("https://")) {
+                storeUrl.href = item.url;
+              } else {
+                storeUrl.href = `https://${item.url}`;
+              }
+
+              storeDiv.appendChild(storeUrl);
+            }
 
             if (authData.loggedIn) {
               let deleteBtn = document.createElement("button");
@@ -73,7 +82,7 @@ fetch("/api/store", {
   .then((response) => response.json())
   .then((data) => {
     console.log("New store added:", data);
-    fetchStores(); // store list refresh after adding new store
+    fetchStores(currentRoute); // store list refresh after adding new store
   });
 }
 
@@ -94,7 +103,7 @@ fetch(`/api/store/${id}`, {
   .then((response) => response.json())
   .then((data) => {
     console.log("Store updated:", data);
-    fetchStores(); // refresh store list after update
+    fetchStores(currentRoute); // refresh store list after update
   });
 }
 
@@ -105,64 +114,70 @@ fetch(`/api/store/${id}`, {
   .then((response) => response.json())
   .then((data) => { 
     console.log("Store deleted:", data);
-    fetchStores(); // refresh store list after deletion
+    fetchStores(currentRoute); // refresh store list after deletion
   });
 }
 
 const form = document.getElementById("addStoreForm");
 
 form.addEventListener("submit", function (e) {
-e.preventDefault();
+  e.preventDefault();
 
-const id = document.getElementById("storeId").value;
-const name = document.getElementById("storeName").value.trim();
-const url = document.getElementById("storeUrl").value.trim();
-const phone = document.getElementById("storePhone").value.trim();
-const district = document.getElementById("storeDistrict").value.trim();
+  const id = document.getElementById("storeId").value;
+  const name = document.getElementById("storeName").value.trim();
+  const url = document.getElementById("storeUrl").value.trim();
+  const phone = document.getElementById("storePhone").value.trim();
+  const district = document.getElementById("storeDistrict").value.trim();
 
-if (id) {
-  updateStore(id, name, url, district, phone);
-} else {
-  addStore(name, url, district, phone);
-}
+  if (id) {
+    updateStore(id, name, url, district, phone);
+  } else {
+    addStore(name, url, district, phone);
+  }
 
-form.reset();
-document.getElementById("storeId").value = "";
-document.querySelector("#addStoreForm .btn[type='submit']").innerText = "Add store";
+  form.reset();
+  document.getElementById("storeId").value = "";
+  document.getElementById("formBtn").innerText = "Add store";
 });
 
 function editStore(id) {
-  const storeDiv = document.getElementById("storeDiv");
+  const storeDiv = document.querySelector(`[storeId="${id}"]`);
 
-  // Populate the form fields
   document.getElementById("storeId").value = id;
   document.getElementById("storeName").value = storeDiv.querySelector("h2").innerText;
   document.getElementById("storeDistrict").value = storeDiv.querySelector("p:nth-child(2)").innerText;
   document.getElementById("storePhone").value = storeDiv.querySelector("p:nth-child(3)").innerText;
-  document.getElementById("storeUrl").value = storeDiv.querySelector("a").href.replace("https://", "");
+
+  // Check if the store has a URL before trying to access it
+  const link = storeDiv.querySelector("a");
+  document.getElementById("storeUrl").value = link ? link.href : "";
 
   document.getElementById("formBtn").innerText = "Update store";
 
-  // Scroll up to the form
+  // scroll to the form when edit button is clicked
   document.getElementById("addStoreForm").scrollIntoView({ behavior: "smooth" });
 }
 
-document.getElementById("sortNameAsc").addEventListener("click", () =>
-fetchStores("/api/stores/sortNameAsc")
-);
+document.getElementById("sortNameAsc").addEventListener("click", () => {
+  currentRoute = "/api/stores/sortNameAsc";
+  fetchStores(currentRoute);
+});
 
-document.getElementById("sortNameDesc").addEventListener("click", () =>
-fetchStores("/api/stores/sortNameDesc")
-);
 
-document.getElementById("sortDistrictAsc").addEventListener("click", () =>
-fetchStores("/api/stores/sortDistrictAsc")
-);
+document.getElementById("sortNameDesc").addEventListener("click", () =>{
+  currentRoute = "/api/stores/sortNameDesc";
+  fetchStores(currentRoute);
+});
 
-document.getElementById("sortDistrictDesc").addEventListener("click", () =>
-fetchStores("/api/stores/sortDistrictDesc")
-);
+document.getElementById("sortDistrictAsc").addEventListener("click", () => {
+  currentRoute = "/api/stores/sortDistrictAsc";
+  fetchStores(currentRoute);
+});
 
+document.getElementById("sortDistrictDesc").addEventListener("click", () => {
+  currentRoute = "/api/stores/sortDistrictDesc";
+  fetchStores(currentRoute);
+});
 
 function checkAuth() {
 fetch("/api/auth/status")
@@ -175,6 +190,4 @@ fetch("/api/auth/status")
 }
 
 checkAuth();
-
-
-fetchStores();
+fetchStores(currentRoute);

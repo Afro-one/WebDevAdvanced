@@ -3,6 +3,6 @@ const params = new URLSearchParams(window.location.search);
   if (error) {
     const p = document.createElement("p");
     p.className = "login-error";
-    p.textContent = error;
-    document.querySelector(".login-form").prepend(p);
+    p.innerHTML = error;
+    document.querySelector(".login-form").append(p);
   }
